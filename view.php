@@ -105,7 +105,7 @@ if ($office->intro) {
     echo $OUTPUT->box(format_module_intro('office', $office, $cm->id), 'generalbox mod_introbox', 'officeintro');
 }
 
-echo $OUTPUT->box($name1, 'generalbox mod_introbox', 'officeintro');
+//echo $OUTPUT->box($name1, 'generalbox mod_introbox', 'officeintro');
 // Replace the following lines with you own code.
 
 
@@ -194,7 +194,7 @@ for($ct = 0;$ct <= $i-1;$ct++){
 
 }else{//idみて短縮ifの終端 ここから下idがある場合の読み込み、出力
 for($ct_t = 0;$ct_t<=$i;$ct_t++){
-	if($csv[$ct_t][0]==$id_lim){
+	if($csv[$ct_t][0] == $id_lim){
 		$num_num = count($csv[$ct_t]);
 		$courseid = $csv[$ct_t][$num_num-1];//コースidを取得する
 		$str = groups_get_user_groups($courseid, $userid);//見ているuserの所属しているグループidの配列
@@ -215,7 +215,7 @@ for($ct_t = 0;$ct_t<=$i;$ct_t++){
 
 
 $file = fopen("url_db.csv", "w");//ここからshareDBの書き込み
-for($j=0 ; 0 <= $i ; $i-- ){
+for($j=0 ; 0 < $i ; $i-- ){
   fputcsv($file, $csv[$j]);
   $j++;
 }
@@ -302,7 +302,7 @@ $csv_view = array_values($csv_view);
 
 for($ct_view = 0;$ct_view<=$i_view;$ct_view++){
 	
-	if($csv_view[$ct_view][0]==$id_lim){
+	if($csv_view[$ct_view][0] == $id_lim){
 		$lim = count($csv_view[$ct_view])/2;
 		for($nt1 = 0;$nt1 < $lim-1;$nt1++){
 			$url_view = $csv_view[$ct_view][2*$nt1+1];
@@ -315,7 +315,7 @@ for($ct_view = 0;$ct_view<=$i_view;$ct_view++){
 
 
 $file = fopen("view_db.csv", "w");//ここからshareDBの書き込み
-for($j=0 ; 0 <= $i_view ; $i_view-- ){
+for($j=0 ; 0 < $i_view ; $i_view-- ){
   fputcsv($file, $csv_view[$j]);
   $j++;
 }
