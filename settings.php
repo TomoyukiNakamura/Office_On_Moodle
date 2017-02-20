@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
     // Administration header!
-	$settings->add(new admin_setting_heading('mod_office/view_administration',get_string('setting_head','office')));
+	$settings->add(new admin_setting_heading('mod_office/view_administration',get_string('setting_head','office'),''));
 	$str_url ='';
 	$str_lang = get_string( 'setting_lang' , 'office');
 	if($str_lang == 'ja'){
