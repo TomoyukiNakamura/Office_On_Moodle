@@ -48,9 +48,13 @@ class mod_office_mod_form extends moodleform_mod {
     public function definition() {
 	 global $out;
         global $CFG;
+
+	 $onedrivehtml = str_replace($_SERVER['DOCUMENT_ROOT'],'',__FILE__);
+	 $onedrivehtml = str_replace('mod_form.php','',$onedrivehtml);
+	 $onedrivehtml = $onedrivehtml."onedrive.html";
 	 
 	 $get_app_id = get_config('mod_office','clientid');
-	 $re_url = "https://".$_SERVER["HTTP_HOST"]."/moodle/mod/office/onedrive.html";
+	 $re_url = "https://".$_SERVER["HTTP_HOST"].$onedrivehtml;
 	 
         $mform = $this->_form;
 
@@ -84,7 +88,7 @@ class mod_office_mod_form extends moodleform_mod {
         // Adding the rest of office settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
 	 $str_bun = get_string( 'onedrive_share_setumei' , 'office');
-        $mform -> addElement ( 'html' , "<table><tr><td width=700px><b>$str_bun</b></td><td>");	 
+        $mform -> addElement ( 'html' , "<table><tr><td width=800px><b>$str_bun</b></td><td>");	 
 	 $mform -> addElement ( 'html' , '<div class="row">');
 	 $mform -> addElement ( 'html' ,'<input id="downloadLink" type="hidden" value="download" name="actionType" checked="checked"> ');
 	 $mform -> addElement ( 'html' , '</div>');
@@ -112,6 +116,7 @@ class mod_office_mod_form extends moodleform_mod {
 	 $str_bun_2 = get_string( 'onedrive_share_group' , 'office');
 	 $mform -> addElement ( 'html' ,"<tr><td width='180'><b>&nbsp;$str_bun</b></td><td width='180'><b>&nbsp;$str_bun_2</b></td></tr>");
 	 $mform -> addElement ( 'html' ,'</table>');
+	 $mform -> addElement ( 'html' ,"<table id = 'list2'></table>");
 	 $mform -> addElement ( 'html' , '</p>');
 
 	 $mform -> addElement ( 'html' , '<br>');
@@ -121,7 +126,7 @@ class mod_office_mod_form extends moodleform_mod {
         $mform->setExpanded('onedrive_view',true);
 
 	 $str_bun = get_string( 'onedrive_view_setumei' , 'office');
-        $mform -> addElement ( 'html' , "<table><tr><td width=700px><b>$str_bun</b></td><td>");	 
+        $mform -> addElement ( 'html' , "<table><tr><td width=800px><b>$str_bun</b></td><td>");	 
 	 $mform -> addElement ( 'html' , '<div class="row">');
 	 $mform -> addElement ( 'html' ,'<input id="downloadLink" type="hidden" value="download" name="actionType" checked="checked"> ');
 	 $mform -> addElement ( 'html' , '</div>');
@@ -141,6 +146,7 @@ class mod_office_mod_form extends moodleform_mod {
 	 $mform -> addElement ( 'html' ,"<tr><td width='180'><b>&nbsp;$str_bun </b></td></tr>");
 	 $mform -> addElement ( 'html' ,'</table>');
 
+	 $mform -> addElement ( 'html' ,'<table id = "list_view2"></table>');
 	 $mform -> addElement ( 'html' , '<br>');
 
         // Add standard grading elements.
@@ -155,7 +161,8 @@ class mod_office_mod_form extends moodleform_mod {
 
 	 global $DB;
 	 global $USER;
-	 $courseid   = required_param('course', PARAM_INT);
+	 global $PAGE;
+	 $courseid   = $PAGE->course->id;
 	 $DB->get_record('modules',array('id' =>$moduleid));
 	 $groups = $DB->get_records('groups', array('courseid'=>$courseid), 'name');
 	 $array = array();
@@ -302,13 +309,15 @@ if($update != ''){
 //	 $mform -> addElement ( 'html' ,'alert(share_file_name);');
 
 //////////////sharelink表示用の部分////////////////////////////////////////////////////////////
-	 $mform -> addElement ( 'html' ,'var list = document.getElementById("list");');
-
+	 $mform -> addElement ( 'html' ,'var list = document.getElementById("list2");');
+//	 $mform -> addElement ( 'html' ,'var list = document.getElementById("list");');
+	 $mform -> addElement ( 'html' ,'list.textContent = null;');
 
 	 $mform -> addElement ( 'html' ,'for(var i = 0 ; i < file_num ; i++){');
 	 $mform -> addElement ( 'html' ,'var file_name = json_data.value[i]["name"];');
 	 $mform -> addElement ( 'html' ,'var tr = document.createElement("tr");');
 	 $mform -> addElement ( 'html' ,'var td = document.createElement("td");');
+	 $mform -> addElement ( 'html' ,'td.width = 180;');
 	 $mform -> addElement ( 'html' ,'td.textContent = file_name;');
 	 $mform -> addElement ( 'html' ,'tr.appendChild(td);');
 
@@ -441,8 +450,8 @@ if($update != ''){
 //	 $mform -> addElement ( 'html' ,'}');
 
 //////////////viewlink表示用の部分////////////////////////////////////////////////////////////
-	 $mform -> addElement ( 'html' ,'var list = document.getElementById("list_view");');
-
+	 $mform -> addElement ( 'html' ,'var list_v = document.getElementById("list_view2");');
+	 $mform -> addElement ( 'html' ,'list_v.textContent = null;');
 
 	 $mform -> addElement ( 'html' ,'for(var i = 0 ; i < file_num_2 ; i++){');
 	 $mform -> addElement ( 'html' ,'var file_name = json_data_2.value[i]["name"];');
@@ -454,7 +463,7 @@ if($update != ''){
 
 	 $mform -> addElement ( 'html' ,'var td = document.createElement("td");');
 	 $mform -> addElement ( 'html' ,'tr.appendChild(td);');
-	 $mform -> addElement ( 'html' ,'list.appendChild(tr);');
+	 $mform -> addElement ( 'html' ,'list_v.appendChild(tr);');
 	 $mform -> addElement ( 'html' ,'}');
 ///////////////////////viewlink表示用ここまで///////////////////////////////////////////////////////////
 
